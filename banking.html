@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://unpkg.com/tailwindcss@^2/dist/tailwind.min.css" rel="stylesheet">
+    <title>Banking</title>
+</head>
+<body>
+    <header>
+        <h1 class="text-5xl text-center my-10">Welcome to <span  class="text-red-400">to your bank account</span> !!!</h1>
+    </header>
+    <main>
+        <div class="flex justify-center text-white text-4xl">
+
+            <!-- deposit balance  -->
+            <div  class="deposit bg-blue-300 m-2 px-3 py-5 rounded w-1/6">
+                <h2 class="text-xl">Deposit</h2>
+                <h1>$<span id="current-deposit">00</span></h1>
+            </div>
+
+            <!-- withdraw balance  -->
+            <div  class="withdraw bg-green-300 m-2 px-3 py-5 rounded w-1/6">
+                <h2 class="text-xl">Withdraw</h2>
+                <h1>$<span id="current-withdraw">00</span></h1>
+            </div>
+
+            <!-- total balance  -->
+            <div  class="balance bg-red-300 m-2 px-3 py-5 rounded w-1/6">
+                <h2 class="text-xl">Balance</h2>
+                <h1>$<span id="total-balance">1200</span></h1>
+            </div>
+        </div>
+
+        <div class="flex justify-center ">
+
+            <!-- deposit input field  -->
+            <div class="bg-purple-200 p-6 m-5 rounded w-1/4">
+                <h1 class="text-2xl">Please Deposit</h1>
+                <input id="input-deposit" type="text" placeholder="$ amount you want to deposit" class="bg-white border mb-5 rounded py-1.5 px-2 w-full" ><br>
+                <button id="deposit-button" class="bg-red-400 rounded py-1.5 px-2 text-center w-1/2 text-white font-medium text-lg">Deposit</button>
+            </div>
+
+            <!-- withdraw input field  -->
+            <div class="bg-yellow-200 p-6 m-5 rounded w-1/4">
+                <h1 class="text-2xl">Please Withdraw</h1>
+                <input id="input-withdraw" type="text" placeholder="$ amount you want to withdraw" class="bg-white border mb-5 rounded py-1.5 px-2 w-full" ><br>
+                <button id="withdraw-button" class="bg-red-400 rounded py-1.5 px-2 text-center w-1/2 text-white font-medium text-lg">Withdraw</button>
+            </div>
+
+        </div>
+        <div class="text-center">
+            <button class="bg-gradient-to-r from-purple-300 to-yellow-200  rounded py-1.5 px-2 text-center w-1/4 text-white font-medium text-lg"><a href="index.html">Go Back to login page</a></button>
+        </div>
+    </main>
+
+    <script >
+
+        // get input from input field 
+        function getInput(input){
+            const inpuAmountString = document.getElementById(input);
+            const inpuAmount = parseFloat(inpuAmountString.value);
+            inpuAmountString.value = '';
+            return inpuAmount;
+        }
+ 
+        // get total balance
+        function getTotalBalance(){
+            const TotalBalanceString = document.getElementById('total-balance');
+            const TotalBalance =parseFloat( TotalBalanceString.innerText);
+            return TotalBalance;
+        }
+
+        // update total balance
+        function updateTotalBalance(inputAmount,isAdd){
+            let currentTotalBalance = getTotalBalance();
+            let updatedTotalBalance;
+            if(isAdd == true){
+                 updatedTotalBalance = currentTotalBalance + inputAmount;
+            }
+            else{
+                 updatedTotalBalance = currentTotalBalance - inputAmount;
+            }
+            
+            console.log('current total balance :',currentTotalBalance);
+            console.log('updated total balance :',updatedTotalBalance);
+            document.getElementById('total-balance').innerText = updatedTotalBalance;
+        }
+
+        // add input with current deposit / withdraw
+        function addInput(newAmount,currentAmountId){
+
+            const currentAmountString = document.getElementById(currentAmountId);
+            const currentAmount = parseFloat(currentAmountString.innerText);
+            
+
+            const updatedAmount = currentAmount + newAmount;
+            currentAmountString.innerText = updatedAmount;
+
+            console.log('current Amount :',currentAmount);
+            console.log('new Amount :',newAmount);
+            console.log('updated Amount :', updatedAmount);
+        }
+
+        // deposit calculation
+        document.getElementById('deposit-button').addEventListener('click',function(){
+             const inputAmount = getInput('input-deposit');
+             const currentTotalBalance = getTotalBalance();           
+
+            //  add input function 
+            if(inputAmount>0){
+                const addInputAmount = addInput(inputAmount,'current-deposit');
+                updateTotalBalance(inputAmount,true);
+            }
+        })
+
+        // withdraw calculation
+        document.getElementById('withdraw-button').addEventListener('click',function(){
+             const inputAmount = getInput('input-withdraw');
+             const currentTotalBalance = getTotalBalance();           
+
+            //  add input function 
+            if(inputAmount>0 && inputAmount<currentTotalBalance){
+                const addInputAmount = addInput(inputAmount,'current-withdraw');
+                updateTotalBalance(inputAmount);
+            }
+        })
+    </script>
+    <!-- <script src="banking.js"></script> -->
+</body>
+</html>
